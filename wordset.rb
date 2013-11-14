@@ -53,7 +53,7 @@ class WordSet
 
 
   def random_words
-    @words.keys[0][0].split
+    @words.keys[rand(@words.keys.length)][0].split
   end
 
 

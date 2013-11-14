@@ -21,7 +21,7 @@ class Markov
     words = @wordset.random_words 
     word = ""
 
-    250.times do
+    150.times do
       new_word = @wordset.get_next_word(words.slice(-@depth, @depth))
       words << new_word
       word = new_word
@@ -38,7 +38,6 @@ end
 
 markov = Markov.new(3)
 ARGV.each do |arg| 
-  puts arg
   markov.read_file arg 
 end
 
