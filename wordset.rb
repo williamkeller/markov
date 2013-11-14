@@ -1,7 +1,8 @@
 class WordSet
   attr_reader :weighted_value
 
-  def initialize(words = nil)
+  def initialize(depth = 2, words = nil)
+    @depth = depth
     if words 
       @words = words 
       @weighted_value = @words.values.inject(0) { |sum, value| sum + value }
@@ -10,6 +11,7 @@ class WordSet
       @weighted_value = 0
     end
   end
+
 
   def import_text(text)
     words = text.split
@@ -29,20 +31,49 @@ class WordSet
   end
 
 
-  def find_subset(word)
-    newset = Hash.new
-    @words.each_pair do |key, value|
-      if key[0] == word
-        newset[key] = value
+  def import_text_two(text)
+    words = text.split
+    lw1 = words.unshift
+    lw2 = words.unshift
+    lastword = [lw1, lw2].join(" ")
+
+    words.each do |word|
+
+      pair = [lastword, word]
+      if @words.has_key? pair
+        @words[pair] += 1
+      else
+        @words[pair] = 1
       end
+
+      lw1 = lw2
+      lw2 = word
+      lastword = [lw1, lw2].join(" ")
     end
-    WordSet.new(newset)
+
+    @weighted_value = @words.values.inject(0) { |sum, value| sum + value }
   end
 
 
-  def random_word
-#    @words.keys[rand(@words.keys.length)][rand(1)]
-    @words.keys[0][1]
+  def find_subset(words)
+    if words.class == Array
+      words = words.join(" ")
+    end
+
+    newset = Hash.new
+    @words.each_pair do |key, value|
+      if key[0] == words
+        newset[key] = value
+      end
+    end
+    WordSet.new(@depth, newset)
+  end
+
+
+  def random_words
+#    @words.keys[0][0].split
+
+    ["The", "book"]
   end
 
 
@@ -61,11 +92,24 @@ class WordSet
   end
 
 
-  def get_next_word(word)
-    subset = find_subset(word)
+  def get_next_word(words)
+    subset = find_subset(words)
     index = rand(subset.weighted_value)
     pair = subset.weighted_pair_at(index)
+    if(pair.nil?)
+      puts "Error"
+      puts words
+      puts subset
+      puts index
+    end
     pair[1]
+  end
+
+  def to_s
+    str = ""
+    str += "@weighted_value: #{@weighted_value}\n"
+    str += "@words: #{@words.inspect}"
+
   end
 
 

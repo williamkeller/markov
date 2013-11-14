@@ -7,23 +7,24 @@ class Markov
 
   def initialize
     @wordset = WordSet.new
+    @depth = 2
   end
 
 
   def read_file(filename)
     text = File.read(filename)
-    @wordset.import_text text
+    @wordset.import_text_two text
   end
 
 
   def generate
-    words = []
-    word = @wordset.random_word
+    words = @wordset.random_words  #["The", "book"]
+    word = "of"  # @wordset.random_word
     words << word
+    puts words
 
-    500.times do
-
-      new_word = @wordset.get_next_word(word)
+    25.times do
+      new_word = @wordset.get_next_word(words.slice(-@depth, @depth))
       words << new_word
       word = new_word
     end
