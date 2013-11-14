@@ -5,25 +5,23 @@ FILE = "sources/kjvtxt_clean/gospels.txt"
 
 class Markov
 
-  def initialize
+  def initialize(depth)
     @wordset = WordSet.new
-    @depth = 2
+    @depth = depth
   end
 
 
   def read_file(filename)
     text = File.read(filename)
-    @wordset.import_text_two text
+    @wordset.import_text(text, @depth)
   end
 
 
   def generate
-    words = @wordset.random_words  #["The", "book"]
-    word = "of"  # @wordset.random_word
-    words << word
-    puts words
+    words = @wordset.random_words 
+    word = ""
 
-    25.times do
+    250.times do
       new_word = @wordset.get_next_word(words.slice(-@depth, @depth))
       words << new_word
       word = new_word
@@ -38,7 +36,7 @@ if ARGV.length == 0
   exit
 end
 
-markov = Markov.new
+markov = Markov.new(3)
 ARGV.each do |arg| 
   puts arg
   markov.read_file arg 

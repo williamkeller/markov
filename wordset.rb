@@ -13,29 +13,11 @@ class WordSet
   end
 
 
-  def import_text(text)
+  def import_text(text, depth)
     words = text.split
-    lastword = ""
-
-    words.each do |word|
-      pair = [lastword, word]
-      if @words.has_key? pair
-        @words[pair] += 1
-      else
-        @words[pair] = 1
-      end
-      lastword = word
-    end
-
-    @weighted_value = @words.values.inject(0) { |sum, value| sum + value }
-  end
-
-
-  def import_text_two(text)
-    words = text.split
-    lw1 = words.unshift
-    lw2 = words.unshift
-    lastword = [lw1, lw2].join(" ")
+    prev = Array.new
+    depth.times { prev << words.shift }
+    lastword = prev.join(" ")
 
     words.each do |word|
 
@@ -46,9 +28,9 @@ class WordSet
         @words[pair] = 1
       end
 
-      lw1 = lw2
-      lw2 = word
-      lastword = [lw1, lw2].join(" ")
+      prev.shift
+      prev << word
+      lastword = prev.join(" ")
     end
 
     @weighted_value = @words.values.inject(0) { |sum, value| sum + value }
@@ -71,9 +53,7 @@ class WordSet
 
 
   def random_words
-#    @words.keys[0][0].split
-
-    ["The", "book"]
+    @words.keys[0][0].split
   end
 
 
