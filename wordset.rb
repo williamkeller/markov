@@ -36,6 +36,19 @@ class WordSet
     @weighted_value = @words.values.inject(0) { |sum, value| sum + value }
   end
 
+  def dump_stats
+    puts "#{@words.keys.length} entries"
+    words = @words.to_a.sort_by {|o| o[1] }.reverse
+    words.slice(0, 100).each do |word|
+      puts "#{word[1]} : #{word[0]}"
+    end
+  end
+
+
+  def phrase_count
+    @words.keys.length
+  end
+
 
   def find_subset(words)
     if words.class == Array
@@ -49,6 +62,11 @@ class WordSet
       end
     end
     WordSet.new(@depth, newset)
+  end
+
+
+  def starting_words
+    @words.keys[0][0].split
   end
 
 
