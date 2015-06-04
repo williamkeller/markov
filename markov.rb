@@ -1,9 +1,6 @@
 require "trollop"
 require_relative "wordset"
 
-FILE = "sources/kjvtxt_clean/gospels.txt"
-
-
 class Markov
   attr_accessor :depth, :length, :start
 

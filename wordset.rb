@@ -39,7 +39,7 @@ class WordSet
   def dump_stats
     puts "#{@words.keys.length} entries"
     words = @words.to_a.sort_by {|o| o[1] }.reverse
-    words.slice(0, 100).each do |word|
+    words.slice(0, 1000).each do |word|
       puts "#{word[1]} : #{word[0]}"
     end
   end
